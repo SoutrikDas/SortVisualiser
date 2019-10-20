@@ -1,0 +1,185 @@
+#include<iostream.h>
+#include<conio.h>
+#include<graphics.h>
+//#include<time.h>
+#include<stdlib.h>
+
+
+
+double screenl,screenh;    //global , resolution
+
+void swap(int *a,int *b)
+{ int temp=*b;
+*b=*a;
+*a=temp;
+}
+
+void display(int A[],int l)
+{
+int i=0;
+for(i=0;i<l;i++)
+	{cout<<"i="<<i<<"element="<<A[i]<<endl;
+	}//for close;
+}
+void display(int [],int ,int);
+void SelectionSort(int A[],int l)
+{
+int small,pos,temp,i,j;
+
+for(i=0;i<l-1;i++)
+	{
+	small=A[i];
+	pos=i;
+	for(j=i+1;j<l;j++)
+		{display(A,l,j);
+		if(A[j]<small)
+			{
+			small=A[j];
+			pos=j;
+			}
+		}
+	temp=A[i];
+	A[i]=A[pos];
+	A[pos]=temp;
+
+
+	}
+
+
+
+
+}
+
+int getLength()
+{
+cout<<"enetr no. of elements, incase a decimal is entered , the decimal part will be lost"<<endl;
+
+int k;
+cin>>k;
+
+return k;
+}
+
+
+
+int maxi(int A[], int l)
+{
+double maximum=0;
+
+for(int i=0;i<l;i++)
+	{
+	if(maximum<A[i])
+	maximum=A[i];
+	}
+return maximum;
+
+}
+
+
+
+
+void display(int A[],int l,int redIndex)
+{clrscr();
+
+//--------------COMPLEX FORMULAE--------------------------
+double sborder=100.0;
+
+double hborder=50.0;
+
+double offsetx=50.0;
+
+double offsety=-40.0;
+
+double maxnum=maxi(A,l);
+
+double base=screenh-hborder;
+
+double width=(screenl-2*sborder);
+
+width=width/(2*l+1);
+
+double heightfactor=(screenh-2*hborder)/maxnum;
+cout<<"heightfactor="<<heightfactor;
+//-------------------------------------------------
+
+rectangle(sborder+offsetx,hborder+offsety,screenl-sborder+offsetx,screenh-hborder+offsety);
+for(int i=0;i<l;i++)
+	{double x1=sborder+(i*2+1)*width+offsetx;
+	double y1=base-(A[i]*heightfactor)+offsety;
+	double x2=sborder+(i*2+2)*width+offsetx;
+	double y2=base+offsety;
+	if(i==redIndex)
+	setfillstyle(1,4);
+	bar(x1,y1,x2,y2);
+	setfillstyle(1,15);//15-white
+
+	}
+
+
+} // end of display
+
+
+
+void shuffle(int *ptr,int *ptr2,int l)
+{int i=0;
+
+for(i=0;i<l;i++)
+	{*(ptr2+i)=i+1;
+	}
+
+int elem=l;
+int randomindex;
+
+
+for(i=0;i<l;i++)
+	{ randomindex=random(elem);
+	 *(ptr+i)=*(ptr2+randomindex);
+	//deletion of one wlementsupposedly the inputs must be ptr2,and random(elem)
+	for(int j=randomindex;j<elem-1;j++)
+		{*(ptr2+j)=*(ptr2+j+1);
+		}
+	elem--;
+	} //outer for
+}//shuffle close
+
+
+
+void main()
+{
+clrscr();
+int gd=DETECT,gm;
+initgraph(&gd,&gm,"C:\\TURBOC3\\BGI");
+
+screenl=getmaxx();
+screenh=getmaxy();
+
+cout<<"Screen Resol:"<<screenl<<"x"<<screenh;
+
+randomize();
+
+int i=0,l=getLength();
+setcolor(RED);
+
+int *ptr;
+ptr=new int[l];
+//1-solid fill,0-empty fill, 4-red;
+getch();
+int *ptr2=new int[l];
+//shufle of array
+int choice =0;
+while(choice!=2)//2 means stop wasting time and go after shuffle part to sort part
+	{
+	shuffle(ptr,ptr2,l);
+	display(ptr,l,-1);
+	cout<<"DO you want to shuffle again? 1-Yes 2-No"<<endl;
+	cin>>choice;
+
+	}
+
+SelectionSort(ptr,l);
+display(ptr,l,-1);
+
+
+getch();
+
+}
